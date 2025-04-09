@@ -17,12 +17,12 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
-          - os: ubuntu-latest
-            artifact_name: synterix-linux
-            wails_platform: linux
-          - os: windows-latest
-            artifact_name: synterix-windows
-            wails_platform: windows
+#          - os: ubuntu-latest
+#            artifact_name: synterix-linux
+#            wails_platform: linux
+#          - os: windows-latest
+#            artifact_name: synterix-windows
+#            wails_platform: windows
           - os: macos-latest
             artifact_name: synterix-darwin
             wails_platform: darwin
