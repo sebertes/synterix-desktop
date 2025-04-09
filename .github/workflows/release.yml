@@ -88,8 +88,6 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           tag_name: ${{ env.TAG_NAME }}
           name: Release ${{ env.TAG_NAME }}
@@ -97,3 +95,5 @@ jobs:
 #            artifacts/synterix-linux/*
 #            artifacts/synterix-windows/*
             artifacts/synterix-darwin/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
