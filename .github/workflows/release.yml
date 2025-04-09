@@ -59,7 +59,7 @@ jobs:
       - name: Create and push tag
         run: |
           git tag ${{ env.TAG_NAME }}
-          git push origin ${{ env.TAG_NAME }}
+          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} ${{ env.TAG_NAME }}
 
       - name: Build project
         run: |
@@ -88,6 +88,8 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           tag_name: ${{ env.TAG_NAME }}
           name: Release ${{ env.TAG_NAME }}
