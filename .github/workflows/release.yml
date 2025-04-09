@@ -18,13 +18,13 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
-            artifact_name: myapp-linux
+            artifact_name: synterix-linux
             wails_platform: linux
           - os: windows-latest
-            artifact_name: myapp-windows
+            artifact_name: synterix-windows
             wails_platform: windows
           - os: macos-latest
-            artifact_name: myapp-darwin
+            artifact_name: synterix-darwin
             wails_platform: darwin
 
     steps:
@@ -34,18 +34,20 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.23'
+          go-version: '1.21'
 
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
-      - name: Install dependencies (Linux)
+      - name: Install Linux dependencies
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev || \
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev || \
+          sudo apt-get install -y libgtk-3-dev webkit2gtk-driver
 
-      - name: Install dependencies (Windows)
+      - name: Install Windows dependencies
         if: matrix.os == 'windows-latest'
         run: choco install -y nsis
 
@@ -74,39 +76,13 @@ jobs:
           path: artifacts
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           tag_name: ${{ env.TAG_NAME }}
-          release_name: Release ${{ env.TAG_NAME }}
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Assets
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/synterix-linux/*
-          asset_name: synterix-linux.tar.gz
-
-      - name: Upload Windows Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/synterix-windows/*
-          asset_name: synterix-windows.zip
-
-      - name: Upload MacOS Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/synterix-darwin/*
-          asset_name: synterix-darwin.app.tar.gz
+          name: Release ${{ env.TAG_NAME }}
+          files: |
+            artifacts/synterix-linux/*
+            artifacts/synterix-windows/*
+            artifacts/synterix-darwin/*
