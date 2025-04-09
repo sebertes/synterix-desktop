@@ -58,7 +58,7 @@ jobs:
         run: wails build -platform ${{ matrix.wails_platform }} -clean -upx -nsis -ldflags "-X main.version=${{ env.VERSION }}"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}
           path: build/bin/*
