@@ -51,15 +51,15 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: choco install -y nsis
 
-      - name: Create version tag
-        run: |
-          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
-          echo "TAG_NAME=v${{ github.event.inputs.version }}" >> $GITHUB_ENV
-
       - name: Create and push tag
         run: |
-          git tag ${{ env.TAG_NAME }}
-          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} ${{ env.TAG_NAME }}
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          TAG_NAME="v${{ github.event.inputs.version }}"
+          git tag -a $TAG_NAME -m "Release $TAG_NAME"
+          git push origin $TAG_NAME
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Build project
         run: |
@@ -91,7 +91,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          tag_name: ${{ env.TAG_NAME }}
-          name: Release ${{ env.TAG_NAME }}
+          tag_name: v${{ github.event.inputs.version }}
+          name: Release v${{ github.event.inputs.version }}
           files: |
             artifacts/synterix-darwin/*
