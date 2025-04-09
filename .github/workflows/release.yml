@@ -58,9 +58,9 @@ jobs:
       - name: Build project
         run: |
           if ($env:matrix_wails_platform -eq "windows") {
-            wails build -platform $env:matrix_wails_platform -upx -nsis -ldflags "-X main.version=$env:VERSION"
+            wails build -platform $env:matrix_wails_platform -nsis
           } else {
-            wails build -platform $env:matrix_wails_platform -upx -ldflags "-X main.version=$env:VERSION"
+            wails build -platform $env:matrix_wails_platform
           }
         shell: pwsh
 
