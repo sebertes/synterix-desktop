@@ -85,8 +85,6 @@ jobs:
         run: |
           git tag ${{ env.TAG_NAME }}
           git push origin ${{ env.TAG_NAME }}
-        env:
-          TAG_NAME: ${{ env.TAG_NAME }}
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
