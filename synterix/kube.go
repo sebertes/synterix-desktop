@@ -240,6 +240,9 @@ func (s *KubeProxyServer) Toggle(token string, edgeId string) {
 	defer s.headerLock.Unlock()
 
 	if s.EdgeId == edgeId {
+		s.events <- KubeEvent{
+			EventType: Toggled,
+		}
 		return
 	}
 
