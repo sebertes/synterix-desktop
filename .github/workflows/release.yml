@@ -92,8 +92,6 @@ jobs:
           tag_name: ${{ env.TAG_NAME }}
           name: Release ${{ env.TAG_NAME }}
           files: |
-#            artifacts/synterix-linux/*
-#            artifacts/synterix-windows/*
             artifacts/synterix-darwin/*
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
