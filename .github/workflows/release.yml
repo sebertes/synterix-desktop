@@ -33,7 +33,7 @@ jobs:
           submodules: recursive
 
       - name: Build wails
-        uses: dAppServer/wails-build-action@v2.2
+        uses: dAppServer/wails-build-action@v3
         id: build
         with:
           build-name: ${{ matrix.build.name }}
@@ -50,12 +50,6 @@ jobs:
         run: |
           git tag ${{ env.TAG_NAME }}
           git push origin ${{ env.TAG_NAME }}
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.build.name }}-${{ matrix.build.platform }}
-          path: build/bin/*
 
   release:
     name: Create Release
