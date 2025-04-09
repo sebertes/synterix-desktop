@@ -11,35 +11,45 @@ on:
 
 jobs:
   build:
-    name: Wails build
+    name: Build Wails App
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        build:
-          - name: 'App'
-            platform: 'linux/amd64'
-            os: 'ubuntu-latest'
-          - name: 'App'
-            platform: 'windows/amd64'
-            os: 'windows-latest'
-          - name: 'App'
-            platform: 'darwin/universal'
-            os: 'macos-latest'
-      fail-fast: false
-    runs-on: ${{ matrix.build.os }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
+#        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [macos-latest]
+        include:
+#          - os: ubuntu-latest
+#            artifact_name: synterix-linux
+#            wails_platform: linux
+#          - os: windows-latest
+#            artifact_name: synterix-windows
+#            wails_platform: windows
+          - os: macos-latest
+            artifact_name: synterix-darwin
+            wails_platform: darwin
 
-      - name: Build wails
-        uses: dAppServer/wails-build-action@main
-        id: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
         with:
-          build-name: ${{ matrix.build.name }}
-          build-platform: ${{ matrix.build.platform }}
-          package: false
-          go-version: '1.23'
+          go-version: '1.21'
+
+      - name: Install Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Install Linux dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev pkg-config
+          export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:$PKG_CONFIG_PATH
+
+      - name: Install Windows dependencies
+        if: matrix.os == 'windows-latest'
+        run: choco install -y nsis
 
       - name: Create version tag
         run: |
@@ -51,10 +61,19 @@ jobs:
           git tag ${{ env.TAG_NAME }}
           git push origin ${{ env.TAG_NAME }}
 
+      - name: Build project
+        run: |
+          if ($env:matrix_wails_platform -eq "windows") {
+            wails build -nsis
+          } else {
+            wails build
+          }
+        shell: pwsh
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.build.name }}-${{ matrix.build.platform }}
+          name: ${{ matrix.artifact_name }}
           path: build/bin/*
 
   release:
@@ -74,7 +93,3 @@ jobs:
           name: Release ${{ env.TAG_NAME }}
           files: |
             artifacts/synterix-darwin/*
-            artifacts/synterix-linux/*
-            artifacts/synterix-windows/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
