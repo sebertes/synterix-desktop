@@ -1,0 +1,85 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-app-hpa
+  namespace: ${NAMESPACE}
+  labels:
+    app: my-app
+    tier: backend
+  annotations:
+    description: "HPA for MyApp backend with multi-metrics scaling"
+spec:
+  # 目标伸缩资源（Deployment/StatefulSet等）
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app-deployment
+
+  # 副本数范围
+  minReplicas: 2
+  maxReplicas: 20
+
+  # 指标列表（支持资源指标、自定义指标、外部指标）
+  metrics:
+    # 1. CPU 资源指标（基于利用率）
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization  # 或 AverageValue
+          averageUtilization: 70  # 目标CPU利用率（百分比）
+
+    # 2. 内存资源指标（基于绝对值）
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: AverageValue
+          averageValue: 500Mi  # 目标内存使用量
+
+    # 3. 自定义Pod指标（如QPS）
+    - type: Pods
+      pods:
+        metric:
+          name: requests_per_second
+        target:
+          type: AverageValue
+          averageValue: 1000  # 目标每秒请求数
+
+    # 4. 外部指标（如消息队列长度）
+    - type: External
+      external:
+        metric:
+          name: queue_messages_ready
+          selector:
+            matchLabels:
+              queue: "worker_tasks"
+        target:
+          type: AverageValue
+          averageValue: 30  # 目标队列消息数
+
+  # 扩缩行为配置（可选，K8s 1.18+）
+  behavior:
+    # 缩容策略
+    scaleDown:
+      stabilizationWindowSeconds: 300  # 缩容稳定窗口（防止频繁波动）
+      policies:
+        - type: Percent  # 按百分比缩容
+          value: 10      # 每次最多缩容10%的副本
+          periodSeconds: 60  # 每60秒执行一次
+        - type: Pods     # 按固定数量缩容
+          value: 2       # 每次最多缩容2个副本
+          periodSeconds: 60
+      selectPolicy: Min  # 选择最保守的缩容策略（Min/Max）
+
+    # 扩容策略
+    scaleUp:
+      stabilizationWindowSeconds: 0  # 0表示立即扩容
+      policies:
+        - type: Percent
+          value: 100    # 每次最多扩容100%的副本
+          periodSeconds: 15
+        - type: Pods
+          value: 4      # 每次最多扩容4个副本
+          periodSeconds: 15
+      selectPolicy: Max  # 选择最激进的扩容策略

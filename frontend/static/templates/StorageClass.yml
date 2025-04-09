@@ -1,0 +1,22 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-ssd
+  namespace: ${NAMESPACE}
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"  # 设为默认 StorageClass
+  labels:
+    environment: production
+    tier: storage
+provisioner: kubernetes.io/aws-ebs  # 存储供应驱动
+reclaimPolicy: Retain               # 回收策略：Delete/Retain
+allowVolumeExpansion: true          # 允许卷扩容
+volumeBindingMode: WaitForFirstConsumer  # 卷绑定模式
+parameters:                         # 供应参数
+  type: gp3
+  fsType: ext4
+  iopsPerGB: "50"
+  encrypted: "true"
+mountOptions:                       # 挂载选项
+  - discard
+  - noatime

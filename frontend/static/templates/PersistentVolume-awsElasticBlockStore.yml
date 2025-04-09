@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-ssd-001
+  namespace: ${NAMESPACE}
+  labels:
+    storage-tier: ssd
+    environment: production
+  annotations:
+    pv.kubernetes.io/provisioned-by: manual
+spec:
+  capacity:
+    storage: 100Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: fast-ssd
+  mountOptions:
+    - discard
+    - noatime
+  awsElasticBlockStore:
+    volumeID: vol-1234567890abcdef0
+    fsType: ext4
+    partition: 1  # 可选分区号

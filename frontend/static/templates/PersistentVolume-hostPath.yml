@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-ssd-001
+  labels:
+    storage-tier: ssd
+    environment: production
+  annotations:
+    pv.kubernetes.io/provisioned-by: manual
+spec:
+  capacity:
+    storage: 100Gi  # 存储容量
+  volumeMode: Filesystem  # 或 Block
+  accessModes:
+    - ReadWriteOnce  # 访问模式
+    # - ReadOnlyMany
+    # - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain  # 回收策略
+  storageClassName: fast-ssd  # 关联的 StorageClass
+  mountOptions:  # 挂载选项
+    - discard
+    - noatime
+  # 具体卷类型配置（以下任选一种）
+  hostPath:
+    path: /mnt/data
+    type: DirectoryOrCreate

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: ${NAMESPACE}
+  labels:
+    app: my-application
+    environment: production
+data:
+  key: xx
+binaryData:

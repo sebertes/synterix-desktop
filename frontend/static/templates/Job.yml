@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data-processor
+  namespace: ${NAMESPACE}
+spec:
+  completions: 5
+  parallelism: 2
+  backoffLimit: 4
+  activeDeadlineSeconds: 3600
+  template:
+    spec:
+      containers:
+        - name: processor
+          image: data-processor:latest
+          command: ["/bin/sh", "-c", "process-data.sh"]
+      restartPolicy: OnFailure  # Job必须指定Never或OnFailure

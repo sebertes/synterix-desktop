@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-ssd-001
+  labels:
+    storage-tier: ssd
+    environment: production
+  annotations:
+    pv.kubernetes.io/provisioned-by: manual
+spec:
+  capacity:
+    storage: 100Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: fast-ssd
+  mountOptions:
+    - discard
+    - noatime
+  nfs:
+    server: nfs-server.example.com
+    path: /exports/data
+    readOnly: false

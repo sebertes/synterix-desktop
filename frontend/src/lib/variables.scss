@@ -1,0 +1,157 @@
+@use "sass:map";
+@use "sass:list";
+
+$primary: var(--primary);
+$surfaceTint: var(--surface-tint);
+$onPrimary: var(--on-primary);
+$primaryContainer: var(--primary-container);
+$onPrimaryContainer: var(--on-primary-container);
+$secondary: var(--secondary);
+$onSecondary: var(--on-secondary);
+$secondaryContainer: var(--secondary-container);
+$onSecondaryContainer: var(--on-secondary-container);
+$tertiary: var(--tertiary);
+$onTertiary: var(--on-tertiary);
+$tertiaryContainer: var(--tertiary-container);
+$onTertiaryContainer: var(--on-tertiary-container);
+$error: var(--error);
+$onError: var(--on-error);
+$errorContainer: var(--error-container);
+$onErrorContainer: var(--on-error-container);
+$background: var(--background);
+$onBackground: var(--on-background);
+$surface: var(--surface);
+$onSurface: var(--on-surface);
+$surfaceVariant: var(--surface-variant);
+$onSurfaceVariant: var(--on-surface-variant);
+$outline: var(--outline);
+$outlineVariant: var(--outline-variant);
+$shadow: var(--shadow);
+$scrim: var(--scrim);
+$inverseSurface: var(--inverse-surface);
+$inverseOnSurface: var(--inverse-on-surface);
+$inversePrimary: var(--inverse-primary);
+$primaryFixed: var(--primary-fixed);
+$onPrimaryFixed: var(--on-primary-fixed);
+$primaryFixedDim: var(--primary-fixed-dim);
+$onPrimaryFixedVariant: var(--on-primary-fixed-variant);
+$secondaryFixed: var(--secondary-fixed);
+$onSecondaryFixed: var(--on-secondary-fixed);
+$secondaryFixedDim: var(--secondary-fixed-dim);
+$onSecondaryFixedVariant: var(--on-secondary-fixed-variant);
+$tertiaryFixed: var(--tertiary-fixed);
+$onTertiaryFixed: var(--on-tertiary-fixed);
+$tertiaryFixedDim: var(--tertiary-fixed-dim);
+$onTertiaryFixedVariant: var(--on-tertiary-fixed-variant);
+$surfaceDim: var(--surface-dim);
+$surfaceBright: var(--surface-bright);
+$surfaceContainerLowest: var(--surface-container-lowest);
+$surfaceContainerLow: var(--surface-container-low);
+$surfaceContainer: var(--surface-container);
+$surfaceContainerHigh: var(--surface-container-high);
+$surfaceContainerHighest: var(--surface-container-highest);
+$dangerColor: var(--danger-color);
+$dangerOnColor: var(--danger-on-color);
+$dangerColorContainer: var(--danger-color-container);
+$dangerOnColorContainer: var(--danger-on-color-container);
+$warnColor: var(--warn-color);
+$warnOnColor: var(--warn-on-color);
+$warnColorContainer: var(--warn-color-container);
+$warnOnColorContainer: var(--warn-on-color-container);
+$infoColor: var(--info-color);
+$infoOnColor: var(--info-on-color);
+$infoColorContainer: var(--info-color-container);
+$infoOnColorContainer: var(--info-on-color-container);
+$successColor: var(--success-color);
+$successOnColor: var(--success-on-color);
+$successColorContainer: var(--success-color-container);
+$successOnColorContainer: var(--success-on-color-container);
+$logo: var(--logo);
+
+$danger:var(--danger);
+$danger-darker:var(--danger-darker);
+$danger-lighter:var(--danger-lighter);
+$warn:var(--warn);
+$warn-darker:var(--warn-darker);
+$warn-lighter:var(--warn-lighter);
+$info:var(--info);
+$info-darker:var(--info-darker);
+$info-lighter:var(--info-lighter);
+$success:var(--success);
+$success-darker:var(--success-darker);
+$success-lighter:var(--success-lighter);
+
+$element-sizes: (
+        "small": (
+                padding: 6px 10px,
+                line-height: 16px
+        ),
+        "medium": (
+                padding: 10px 14px,
+                line-height: 16px
+        ),
+        "large": (
+                padding: 12px 20px,
+                line-height: 20px
+        )
+);
+
+@mixin apply-size($size) {
+  $config: map.get($element-sizes, $size);
+  padding: map.get($config, padding);
+  line-height: map.get($config, line-height);
+}
+
+
+$elevation-colors: (
+        0: transparent,
+        1: rgba(0, 0, 0, 0.05),
+        2: rgba(0, 0, 0, 0.10),
+        3: rgba(0, 0, 0, 0.15),
+        4: rgba(0, 0, 0, 0.20),
+        5: rgba(0, 0, 0, 0.25),
+);
+
+$elevation-shadows: (
+        0: (none),
+        1: (0px 1px 2px 0px, 0px 1px 3px 1px),
+        2: (0px 1px 2px 0px, 0px 2px 6px 2px),
+        3: (0px 4px 8px 3px, 0px 6px 10px 4px),
+        4: (0px 8px 12px 6px, 0px 16px 24px 12px),
+        5: (0px 16px 24px 8px, 0px 32px 48px 16px),
+);
+
+// 定义 Mixin
+@mixin elevation($level: 0) {
+  @if map.has-key($elevation-shadows, $level) {
+    $primary-shadow: list.nth(map.get($elevation-shadows, $level), 1);
+    $ambient-shadow: list.nth(map.get($elevation-shadows, $level), 2);
+    $shadow-color: map.get($elevation-colors, $level);
+
+    box-shadow: #{$primary-shadow} #{$shadow-color},
+    #{$ambient-shadow} #{$shadow-color};
+  } @else {
+    @error "Invalid elevation level: #{$level}. Use 0-5.";
+  }
+}
+
+// 然后定义 typescale 混合宏
+@mixin typescale($style) {
+  @if $style == 'title-small' {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+  }
+  @if $style == 'body-medium' {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    letter-spacing: 0.25px;
+  }
+  @if $style == 'body-small' {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.4px;
+  }
+}

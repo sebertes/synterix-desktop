@@ -1,0 +1,25 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-admin-role
+  labels:
+    rbac-tier: cluster-admin
+  annotations:
+    rbac.authorization.kubernetes.io/description: "Full cluster administration permissions"
+rules:
+  - apiGroups: ["*"]  # 所有API组
+    resources: ["*"]  # 所有资源
+    verbs: ["*"]      # 所有操作
+    resourceNames: [] # 不限制特定资源实例
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterroles", "clusterrolebindings"]
+    verbs: ["*"]
+  - nonResourceURLs: ["/metrics", "/healthz", "/version"]  # 非资源URL
+    verbs: ["get"]
+aggregationRule:  # 聚合规则(可选)
+  clusterRoleSelectors:
+    - matchLabels:
+        rbac-tier: cluster-admin

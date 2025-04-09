@@ -1,0 +1,1527 @@
+@use "theme";
+@use "../lib/variables";
+
+body {
+  background-color: $surfaceContainerLowest;
+  color: $onSurface;
+  font-family: "Lato", arial, helvetica, sans-serif;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease,
+  color 0.3s;
+}
+
+div {
+  transition: background-color ease 0.3s, border-color 0.3s ease;
+}
+
+select,
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  background: $surface;
+  border: 1px solid $outlineVariant;
+  border-radius: 4px;
+  color: $onSurface;
+  transition: all 0.3s ease;
+  outline: none;
+  box-sizing: border-box;
+  margin: 0;
+  display: inline-block;
+  @include apply-size("medium");
+  vertical-align: top;
+  font-size: 14px;
+
+  text-transform: none;
+  -webkit-text-transform: none;
+  autocapitalize: off;
+  -webkit-autocapitalize: off;
+
+  &.input-sm {
+    @include apply-size("small");
+  }
+
+  &.input-lg {
+    @include apply-size("large");
+  }
+}
+
+input:focus {
+  border-color: $primary;
+  box-shadow: 0 0 0 2px $surfaceTint;
+}
+
+input:disabled {
+  background: $surfaceContainerLow;
+  color: $onSurfaceVariant;
+  cursor: not-allowed;
+}
+
+.input-icon {
+  position: relative;
+}
+
+.input-icon > .icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $onSurfaceVariant;
+}
+
+.input-icon input {
+  padding-left: 2.5rem;
+}
+
+.input-group {
+  display: inline-flex;
+  border-radius: 4px;
+  overflow: hidden;
+  vertical-align: middle;
+
+  .input,
+  select {
+    border-radius: 0;
+    border-right: none;
+  }
+
+  .input:last-child,
+  select:last-child {
+    border-right: 1px solid $outlineVariant;
+  }
+}
+
+input[type="checkbox"],
+.checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid $outlineVariant;
+  border-radius: 4px;
+  background: $surface;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  background-color: $background;
+  outline: none;
+  vertical-align: middle;
+}
+
+input[type="checkbox"]:checked,
+.checkbox.checked {
+  background: $primary;
+  border-color: $primary;
+}
+
+input[type="checkbox"]:checked::after,
+.checkbox.checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: solid $onPrimary;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox.indeterminate {
+  background: $primary;
+  border-color: $primary;
+}
+
+.checkbox.indeterminate::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 6px;
+  height: 3px;
+  width: 10px;
+  background: $onPrimary;
+}
+
+input[type="checkbox"]:hover {
+  border-color: $surfaceTint;
+}
+
+input[type="checkbox"]:focus {
+  box-shadow: 0 0 0 2px $surfaceTint;
+}
+
+input[type="checkbox"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+input[type="radio"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid $outline;
+  border-radius: 50%;
+  background: $surface;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  background-color: $background;
+  outline: none;
+  vertical-align: middle;
+}
+
+input[type="radio"]:checked {
+  background: radial-gradient(circle, $primary 50%, transparent 52%);
+  border-color: $primary;
+}
+
+input[type="radio"]:hover {
+  border-color: $surfaceTint;
+}
+
+input[type="radio"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"] {
+  appearance: textfield;
+}
+
+.radio-group {
+  label {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    display: block;
+
+    span {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+input:-moz-autofill,
+input:-moz-autofill:hover,
+input:-moz-autofill:focus,
+input:-moz-autofill:active,
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+input:autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px $surface inset;
+  box-shadow: 0 0 0 1000px $surface inset;
+  -webkit-text-fill-color: $surface;
+  background-color: $surface !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.btn {
+  background-color: $primary;
+  color: $onPrimary;
+  border-radius: 4px;
+  box-sizing: border-box;
+  @include apply-size("medium");
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+  text-decoration: none;
+  font-size: 14px;
+  vertical-align: top;
+  margin: 0;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $primary;
+  display: inline-block;
+
+  &:hover, &.hover {
+    background-color: $primaryContainer;
+    border-color: $primaryContainer;
+    color: $onPrimaryContainer;
+    text-decoration: none;
+  }
+
+  &:active, &.active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus {
+    //outline: 2px solid $surfaceTint;
+    //outline-offset: 2px;
+  }
+
+  &:disabled, &.disabled {
+    background-color: $surfaceVariant;
+    border-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.btn-secondary {
+  background-color: $secondary;
+  color: $onSecondary;
+  border-color: $secondary;
+
+  &:hover {
+    background-color: $secondaryContainer;
+    border-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+  }
+
+  &:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus {
+    outline: 2px solid $surfaceTint;
+    outline-offset: 2px;
+  }
+}
+
+.btn-tertiary {
+  background-color: $tertiary;
+  border-color: $tertiary;
+  color: $onTertiary;
+
+  &:hover {
+    background-color: $tertiaryContainer;
+    border-color: $tertiaryContainer;
+    color: $onTertiaryContainer;
+  }
+
+  &:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus {
+    outline: 2px solid $surfaceTint;
+    outline-offset: 2px;
+  }
+}
+
+.btn-error {
+  background-color: $error;
+  border-color: $error;
+  color: $onError;
+
+  &:hover {
+    background-color: $errorContainer;
+    border-color: $errorContainer;
+    color: $onErrorContainer;
+  }
+
+  &:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus {
+    outline: 2px solid $surfaceTint;
+    outline-offset: 2px;
+  }
+}
+
+.btn-success {
+  background-color: $successColor;
+  border-color: $successColor;
+  color: $successOnColor;
+
+  &:hover {
+    background-color: $successColorContainer;
+    border-color: $successColorContainer;
+    color: $successOnColorContainer;
+  }
+
+  &:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus {
+    outline: 2px solid $surfaceTint;
+    outline-offset: 2px;
+  }
+}
+
+.btn-warn {
+  background-color: $warnColor;
+  border-color: $warnColor;
+  color: $warnOnColor;
+
+  &:hover {
+    background-color: $warnColorContainer;
+    border-color: $warnColorContainer;
+    color: $warnOnColorContainer;
+  }
+
+  &:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus {
+    outline: 2px solid $surfaceTint;
+    outline-offset: 2px;
+  }
+}
+
+.btn-blank {
+  background: none;
+  border-color: $primary;
+  color: $primary;
+
+  &:hover {
+    background: none;
+    border-color: $primaryContainer;
+    color: $onPrimaryContainer;
+  }
+
+  &:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus {
+    outline: 2px solid $surfaceTint;
+    outline-offset: 2px;
+  }
+}
+
+.btn-sm {
+  @include apply-size("small");
+}
+
+.btn-lg {
+  @include apply-size("large");
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.btn-group {
+  display: inline-flex;
+  border-radius: 4px;
+  overflow: hidden;
+  vertical-align: middle;
+
+  .btn {
+    border-radius: 0;
+    //border-right: 1px solid $primaryContainer;
+
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+
+    &:not(:first-child) {
+      margin-left: -1px;
+    }
+  }
+}
+
+
+a {
+  color: $primary;
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $onPrimaryContainer;
+    text-decoration: underline;
+  }
+}
+
+
+.linkable {
+  color: $primary !important;
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $onPrimaryContainer;
+    text-decoration: underline;
+  }
+}
+
+
+.link-sm {
+  font-size: var(--size-sm);
+}
+
+.link-lg {
+  font-size: var(--size-lg);
+}
+
+.dived {
+  all: unset;
+  display: block;
+}
+
+.linked {
+  all: unset;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+
+.table {
+  width: 100%;
+  border-radius: 4px;
+  background-color: $surfaceContainerLow;
+  overflow: auto;
+  border: 1px solid $outlineVariant;
+  position: relative;
+
+  &-row {
+    display: grid;
+    gap: 5px;
+    min-width: 1100px;
+    background-color: $surfaceContainerLow;
+
+    &:not(.table-header):hover {
+      background: $surface;
+    }
+
+    &:not(.table-header).selected:hover {
+      background-color: $surfaceContainerHigh;
+      color: $onPrimaryContainer;
+    }
+
+    //&:not(.table-header):nth-child(even) {
+    //  background-color: $surfaceContainerLow;
+    //}
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $outlineVariant;
+    }
+
+    &.row-desc {
+      padding-bottom: 20px;
+      position: relative;
+    }
+
+    &.selected {
+      background-color: $surfaceContainerHigh;
+      color: $onPrimaryContainer;
+    }
+
+    &:disabled {
+      background-color: $surfaceContainerLow;
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &-cell {
+    padding: 10px 5px;
+    color: $onSurfaceVariant;
+    word-break: break-word;
+    align-self: center;
+
+    &.center {
+      justify-self: center;
+    }
+
+    &.left {
+      justify-self: flex-start;
+    }
+
+    &.right {
+      justify-self: flex-end;
+    }
+
+    .row-desc-text {
+      @include typescale(body-small);
+      color: $onSurfaceVariant;
+      position: absolute;
+      bottom: 8px;
+    }
+  }
+
+  .table-header {
+    background-color: $surface;
+    color: $onSurface;
+    font-weight: 500;
+
+    .table-cell {
+      color: $onSurface;
+      line-height: 30px;
+      white-space: nowrap;
+    }
+  }
+}
+
+.status-text {
+  line-height: 20px;
+  border-radius: 15px;
+  text-align: center;
+  display: inline-block;
+  padding: 0 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+  &.large {
+    font-size: 18px;
+    padding: 0 10px;
+    line-height: 25px;
+  }
+
+  &.status-active,
+  &.status-running,
+  &.status-in-use,
+  &.status-bound,
+  &.status-succeeded {
+    border: 1px solid $successColor;
+    background: $successColorContainer;
+    color: $successOnColorContainer;
+  }
+
+  &.status-updating,
+  &.status-upgrading,
+  &.status-pending,
+  &.status-progressing,
+  &.status-scaling,
+  &.status-waiting,
+  &.status-terminating,
+  &.status-init,
+  &.status-suspended {
+    border: 1px solid $infoColor;
+    background: $infoColorContainer;
+    color: $infoOnColorContainer;
+  }
+
+  &.status-error,
+  &.status-oom,
+  &.status-image-error,
+  &.status-evicted,
+  &.status-crashloop,
+  &.status-unschedulable,
+  &.status-in-use-with-error,
+  &.status-invalid,
+  &.status-lost,
+  &.status-disabled,
+  &.status-failed {
+    border: 1px solid $error;
+    background: $errorContainer;
+    color: $onErrorContainer;
+  }
+
+  &.status-replica-failure,
+  &.status-available,
+  &.status-out-of-sync,
+  &.status-expired,
+  &.status-unhealthy,
+  &.status-evicted,
+  &.status-inactive,
+  &.status-orphaned,
+  &.status-released,
+  &.status-unused,
+  &.status-degraded {
+    border: 1px solid $warnColor;
+    background: $warnColorContainer;
+    color: $warnOnColorContainer;
+  }
+
+  &.status-paused {
+    border: 1px solid $secondary;
+    background: $secondaryContainer;
+    color: $onSecondaryContainer;
+  }
+
+  &.status-unknown {
+    border: 1px solid $outlineVariant;
+    background: $surfaceContainerLow;
+    color: $onSurfaceVariant;
+  }
+}
+
+.scale {
+  position: relative;
+  border: 1px solid $outlineVariant;
+  display: flex;
+  vertical-align: center;
+  width: 150px;
+
+  .bar {
+    flex: 1;
+    margin: 10px 0 0 10px;
+    background: $surfaceContainerHigh;
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 10px;
+    display: flex;
+    transition: background-color .3s ease;
+
+    .bar-in {
+      height: 10px;
+      flex: 1;
+
+      &.status-active,
+      &.status-running,
+      &.status-succeeded {
+        background: $success;
+      }
+
+      &.status-updating,
+      &.status-upgrading,
+      &.status-pending,
+      &.status-progressing,
+      &.status-scaling,
+      &.status-waiting,
+      &.status-terminating,
+      &.status-init,
+      &.status-suspended {
+        background: $info;
+      }
+
+      &.status-error,
+      &.status-oom,
+      &.status-image-error,
+      &.status-evicted,
+      &.status-crashloop,
+      &.status-unschedulable,
+      &.status-failed {
+        background: $danger;
+      }
+
+      &.status-replica-failure,
+      &.status-available,
+      &.status-out-of-sync,
+      &.status-expired,
+      &.status-unhealthy,
+      &.status-evicted,
+      &.status-inactive,
+      &.status-degraded {
+        background: $warn;
+      }
+
+      &.status-unknown {
+        background: $outlineVariant;
+      }
+    }
+
+  }
+
+  .arrow {
+    width: 30px;
+    line-height: 30px;
+    text-align: center;
+  }
+
+  &.active {
+    background: $surfaceContainerHighest;
+  }
+
+  &:hover {
+    background: $surfaceContainerHighest;
+  }
+}
+
+.pods {
+  display: flex;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  .pod {
+    position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 0 5px 5px 0;
+    color: $successOnColorContainer;
+    background: linear-gradient(to right, $surfaceContainerHigh, rgba(0, 0, 0, 0));
+    display: flex;
+
+    .circle {
+      padding: 0 10px 0 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .proportional-circle {
+      width: 50px;
+      height: 50px;
+      position: relative;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .proportional-circle {
+      background: radial-gradient(circle, white calc(50% - var(--thickness)), transparent calc(50% - var(--thickness))),
+      conic-gradient(#4e54c8 0% calc(var(--percent) * 1%), #ddd 0%);
+    }
+
+    .size {
+      width: 240px;
+      font-size: 35px;
+      padding-left: 10px;
+      padding-top: 10px;
+    }
+
+    .dot {
+      padding-left: 10px;
+      padding-bottom: 10px;
+    }
+
+    &:after {
+      content: "";
+      width: 10px;
+      background: $surfaceContainerHigh;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 100%;
+      border-radius: 5px 0 0 5px;
+    }
+
+    &.status-pending {
+      background: linear-gradient(to right, $infoColorContainer, rgba(0, 0, 0, 0));
+
+      &:after {
+        background: $infoColor;
+      }
+
+      .proportional-circle {
+        background: radial-gradient(circle, $infoColorContainer calc(50% - var(--thickness)), transparent calc(50% - var(--thickness))),
+        conic-gradient($info 0% calc(var(--percent) * 1%), $info-darker 0%);
+      }
+    }
+
+    &.status-running {
+      background: linear-gradient(to right, $successColorContainer, rgba(0, 0, 0, 0));
+
+      &:after {
+        background: $successColor;
+      }
+
+      .proportional-circle {
+        background: radial-gradient(circle, $successColorContainer calc(50% - var(--thickness)), transparent calc(50% - var(--thickness))),
+        conic-gradient($successColor 0% calc(var(--percent) * 1%), $success-darker 0%);
+      }
+    }
+
+    &.status-succeeded {
+      background: linear-gradient(to right, $successColorContainer, rgba(0, 0, 0, 0));
+
+      &:after {
+        background: $successColor;
+      }
+
+      .proportional-circle {
+        background: radial-gradient(circle, $successColorContainer calc(50% - var(--thickness)), transparent calc(50% - var(--thickness))),
+        conic-gradient($successColor 0% calc(var(--percent) * 1%), $success-darker 0%);
+      }
+    }
+
+    &.status-failed {
+      background: linear-gradient(to right, $errorContainer, rgba(0, 0, 0, 0));
+
+      &:after {
+        background: $error;
+      }
+
+      .proportional-circle {
+        background: radial-gradient(circle, $dangerColorContainer calc(50% - var(--thickness)), transparent calc(50% - var(--thickness))),
+        conic-gradient($danger 0% calc(var(--percent) * 1%), $danger-darker 0%);
+      }
+    }
+
+    &.status-terminating {
+      background: linear-gradient(to right, $infoColorContainer, rgba(0, 0, 0, 0));
+
+      &:after {
+        background: $infoColor;
+      }
+
+      .proportional-circle {
+        background: radial-gradient(circle, $infoColorContainer calc(50% - var(--thickness)), transparent calc(50% - var(--thickness))),
+        conic-gradient($infoColor 0% calc(var(--percent) * 1%), $info-darker 0%);
+      }
+    }
+
+    &.status-unknown {
+      background: linear-gradient(to right, $secondaryContainer, rgba(0, 0, 0, 0));
+
+      &:after {
+        background: $secondary;
+      }
+
+      .proportional-circle {
+        background: radial-gradient(circle, $warnColorContainer calc(50% - var(--thickness)), transparent calc(50% - var(--thickness))),
+        conic-gradient($warn 0% calc(var(--percent) * 1%), $warn-darker 0%);
+      }
+    }
+  }
+}
+
+body[data-theme="light"] .scale {
+  &.active {
+    background: $surfaceContainerLowest;
+  }
+}
+
+body[data-theme="light"] .scale-menu {
+  background: $surfaceContainerLowest;
+}
+
+.dropdown-menu {
+  position: fixed;
+  background: $surfaceContainerLowest;
+  @include elevation(2);
+  z-index: 1000;
+  min-width: 120px;
+  padding: 10px 0;
+  border-radius: 4px;
+  display: none;
+  transition: box-shadow 0.3s ease, color 0.3s ease;
+  max-height: 350px;
+  overflow: auto;
+
+  &.popup {
+    background: $surfaceContainerHighest;
+  }
+
+  &.visible, &.open {
+    display: block;
+  }
+
+  &:hover {
+    @include elevation(3);
+  }
+
+  .line {
+    height: 1px;
+    background: $outlineVariant;
+  }
+
+  .item {
+    display: block;
+    line-height: 35px;
+    padding: 0 15px;
+    text-decoration: none;
+    color: $onSurface;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: default;
+    white-space: nowrap;
+
+    &.active {
+      background: $primaryContainer;
+      color: $onPrimaryContainer;
+    }
+
+    &:hover {
+      background: $primaryContainer;
+      color: $onPrimaryContainer;
+    }
+  }
+}
+
+body[data-theme="light"] .popup {
+  background: $surfaceContainerLowest;
+}
+
+.intro {
+  margin-right: 10px;
+  line-height: 20px;
+  margin-bottom: 5px;
+
+  .key {
+    color: $outline;
+    padding: 0 5px;
+  }
+
+  .labels {
+    display: inline-block;
+
+    .label {
+      display: inline-block;
+      background: $secondaryContainer;
+      color: $onSecondaryContainer;
+      padding: 0 5px;
+      border-radius: 4px;
+      margin-left: 10px;
+    }
+  }
+}
+
+.annotations {
+  padding-top: 10px;
+  display: none;
+
+  .annotation {
+    border: 1px solid $outlineVariant;
+    padding: 15px;
+    margin-bottom: 10px;
+    position: relative;
+    background: $surfaceContainerLowest;
+    border-radius: 4px;
+
+    .aKey {
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: $outline;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+    }
+
+    .copy {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0 15px;
+      line-height: 35px;
+      border-left: 1px solid $outlineVariant;
+      border-bottom: 1px solid $outlineVariant;
+      color: $onSecondaryContainer;
+      cursor: pointer;
+      border-top-right-radius: 4px;
+
+      &:hover {
+        color: $primary;
+        background: $secondaryContainer;
+      }
+    }
+  }
+
+  &.show {
+    display: block;
+  }
+}
+
+.label-input {
+  background: $surface;
+  border: 1px solid $outlineVariant;
+  border-radius: 4px;
+  color: $onSurface;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  vertical-align: top;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
+  .tip {
+    color: $outline;
+    font-size: 12px;
+    pointer-events: none;
+    padding: 10px 10px 0 10px;
+  }
+
+  input {
+    all: unset;
+    line-height: 30px;
+    font-size: 13px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 10px 5px 10px;
+  }
+
+  .show {
+    all: unset;
+    position: absolute;
+    top: 20px;
+    right: 0;
+    bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid $onPrimary;
+    color: $primary;
+    cursor: pointer;
+    width: 80px;
+    font-size: 14px;
+  }
+
+  .label-input-in {
+    display: flex;
+
+    input {
+      flex: 1;
+    }
+  }
+
+  .input-unit {
+    color: $outline;
+    font-size: 12px;
+  }
+
+  .label-input-addon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px 0 10px;
+    border-left: 1px solid $outlineVariant;
+    margin-top: -14px;
+    margin-bottom: 10px;
+    position: relative;
+
+    &.hidden {
+      padding: 0;
+      border: 0;
+    }
+  }
+
+  .label-input-tip {
+    position: relative;
+    margin-left: 5px;
+    margin-right: 5px;
+
+    .label-input-tip-desc {
+      display: none;
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: $surfaceContainer;
+      border: 1px solid $outlineVariant;
+      border-radius: 4px;
+      padding: 5px 10px 5px 10px;
+      margin-bottom: 6px;
+      z-index: 99999;
+      white-space: nowrap;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%) rotate(-135deg);
+        width: 10px;
+        height: 10px;
+        background: $surfaceContainer;
+        border: 1px solid $outlineVariant;
+        border-bottom: none;
+        border-right: none;
+        margin-top: -5px;
+      }
+    }
+
+    &:hover {
+      .label-input-tip-desc {
+        display: block;
+      }
+    }
+  }
+
+  .label-input-btns {
+    width: 20px;
+    opacity: 0.2;
+    position: absolute;
+    right: 100%;
+    margin-right: 1px;
+
+    .label-input-btn {
+      width: 20px;
+      line-height: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: $outlineVariant;
+
+      &:hover {
+        background-color: $surfaceContainer;
+        color: $onSurface;
+      }
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &.pwd {
+    input {
+      width: calc(100% - 70px);
+    }
+  }
+
+  &:hover {
+    background: $surfaceContainerLowest;
+  }
+
+  &:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-hover);
+    z-index: 9999;
+  }
+
+  &.disabled {
+    background: $surfaceContainerLow;
+    color: $onSurfaceVariant;
+    cursor: not-allowed;
+
+    label {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.label-input-group {
+  display: inline-flex;
+  border-radius: 4px;
+  vertical-align: middle;
+  width: 100%;
+
+  .label-input {
+    border-radius: 0;
+
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+
+    &:not(:first-child) {
+      margin-left: -1px;
+    }
+  }
+}
+
+.term {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  .term-box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 50px;
+    overflow: hidden;
+  }
+
+  .tool {
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  .tools {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top: 1px solid $outlineVariant;
+    padding: 10px;
+    box-sizing: border-box;
+
+    .state {
+      padding: 0 10px 0 10px;
+      color: $danger-lighter;
+      display: inline-block;
+
+      &.connected {
+        color: $success-lighter;
+      }
+    }
+  }
+
+  .right {
+    float: right;
+  }
+}
+
+.workload-content {
+  padding: 30px 20px 20px 20px;
+
+  .workload-loading {
+    margin-left: 30px;
+    line-height: 30px;
+    display: flex;
+
+    .kit {
+      width: 30px;
+      text-align: center;
+
+      .circle {
+        line-height: 30px;
+        width: 30px;
+        text-align: center;
+      }
+    }
+  }
+
+  .workload-loading-bg {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .workload-loading-bg-inner {
+      width: 300px;
+    }
+
+    .workload-loading-desc {
+      line-height: 50px;
+      text-align: center;
+      border-top: 1px solid $outlineVariant;
+    }
+  }
+
+  .workload-header {
+    position: relative;
+
+    .workload-header-title {
+      font-size: 24px;
+      display: inline-block;
+      padding-left: 40px;
+    }
+
+    .workload-header-right {
+      float: right;
+    }
+  }
+
+  .workload-tables {
+    margin-top: 20px;
+  }
+
+  .workload-mid {
+    border-bottom: 1px solid $outlineVariant;
+    padding: 10px 0 10px 0;
+  }
+
+  .workload-tabs {
+    margin-top: 10px;
+  }
+
+  .workload-detail-top {
+    border-bottom: 1px solid $outlineVariant;
+    padding-bottom: 10px;
+
+    .workload-detail-top-in {
+      display: flex;
+
+      .workload-detail-left {
+        flex: 1;
+
+        .workload-detail-title {
+          font-size: 24px;
+          padding-left: 40px;
+        }
+
+        .workload-detail-desc {
+          margin-top: 10px;
+          display: flex;
+        }
+      }
+    }
+  }
+
+  .workload-bottom {
+    .workload-bottom-title {
+      margin-top: 20px;
+      font-size: 15px;
+    }
+  }
+}
+
+.sk-line {
+  height: 32px;
+  width: 150px;
+  background: $surfaceContainerHigh;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+
+  &.dark {
+    background: $surfaceContainerHigh;
+  }
+
+  &.width-200 {
+    width: 200px;
+  }
+
+  &.width-300 {
+    width: 300px;
+  }
+
+  &.height-38 {
+    height: 38px;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, $surfaceContainerHighest, transparent);
+    animation: sweep 2s infinite;
+  }
+}
+
+@keyframes sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.banner {
+  line-height: 40px;
+  background-color: $infoColorContainer;
+  color: $infoOnColorContainer;
+  padding: 0 10px 0 10px;
+  position: relative;
+  margin: 10px 0 10px 0;
+  border-radius: 0 5px 5px 0;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 100%;
+    width: 5px;
+    background-color: $infoColor;
+    border-radius: 2px 0 0 2px;
+  }
+
+  &.error {
+    background-color: $errorContainer;
+    color: $onErrorContainer;
+
+    &::after {
+      background-color: $error;
+    }
+  }
+}
+
+
+.section {
+  margin-bottom: 20px;
+
+  .title {
+    line-height: 50px;
+    font-size: 16px;
+  }
+
+  .sub-title {
+    line-height: 30px;
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  .to-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+  }
+
+  .to-left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+  }
+
+  .block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+
+    &.colum-1 {
+      grid-template-columns: 1fr;
+    }
+
+    &.colum-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    &.colum-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    &.colum-4 {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    &.colum-5 {
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+  }
+
+  .bottom {
+    padding: 10px 0 10px 0;
+  }
+}
+
+
+div {
+  scrollbar-width: thin;
+  scrollbar-color: $surfaceContainerLowest $surfaceContainerLow;
+}
+
+.icon {
+  font-size: 13px;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  font-size: inherit;
+  color: inherit;
+  vertical-align: -0.125em;
+  fill: currentColor;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+.spinner {
+  animation: rotator 1.4s linear infinite;
+}
+
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

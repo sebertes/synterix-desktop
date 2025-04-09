@@ -1,0 +1,170 @@
+$dark-theme: (
+        primary: rgb(143 206 243),
+        surface-tint: rgb(143 206 243),
+        on-primary: rgb(0 53 73),
+        primary-container: rgb(0 76 105),
+        on-primary-container: rgb(195 231 255),
+        secondary: rgb(181 201 215),
+        on-secondary: rgb(32 51 62),
+        secondary-container: rgb(54 73 85),
+        on-secondary-container: rgb(209 229 244),
+        tertiary: rgb(202 193 234),
+        on-tertiary: rgb(50 44 76),
+        tertiary-container: rgb(72 66 100),
+        on-tertiary-container: rgb(230 222 255),
+        error: rgb(255 180 171),
+        on-error: rgb(105 0 5),
+        error-container: rgb(147 0 10),
+        on-error-container: rgb(255 218 214),
+        background: rgb(15 20 23),
+        on-background: rgb(223 227 231),
+        surface: rgb(15 20 23),
+        on-surface: rgb(223 227 231),
+        surface-variant: rgb(65 72 77),
+        on-surface-variant: rgb(192 199 205),
+        outline: rgb(138 146 151),
+        outline-variant: rgb(65 72 77),
+        shadow: rgb(0 0 0),
+        scrim: rgb(0 0 0),
+        inverse-surface: rgb(223 227 231),
+        inverse-on-surface: rgb(44 49 52),
+        inverse-primary: rgb(28 101 133),
+        primary-fixed: rgb(195 231 255),
+        on-primary-fixed: rgb(0 30 44),
+        primary-fixed-dim: rgb(143 206 243),
+        on-primary-fixed-variant: rgb(0 76 105),
+        secondary-fixed: rgb(209 229 244),
+        on-secondary-fixed: rgb(10 30 40),
+        secondary-fixed-dim: rgb(181 201 215),
+        on-secondary-fixed-variant: rgb(54 73 85),
+        tertiary-fixed: rgb(230 222 255),
+        on-tertiary-fixed: rgb(29 23 54),
+        tertiary-fixed-dim: rgb(202 193 234),
+        on-tertiary-fixed-variant: rgb(72 66 100),
+        surface-dim: rgb(15 20 23),
+        surface-bright: rgb(53 58 61),
+        surface-container-lowest: rgb(10 15 18),
+        surface-container-low: rgb(24 28 31),
+        surface-container: rgb(28 32 35),
+        surface-container-high: rgb(38 43 46),
+        surface-container-highest: rgb(49 53 57),
+        danger-color: rgb(255 179 177),
+        danger-on-color: rgb(87 29 31),
+        danger-color-container: rgb(115 51 52),
+        danger-on-color-container: rgb(255 218 216),
+        warn-color: rgb(232 194 108),
+        warn-on-color: rgb(63 46 0),
+        warn-color-container: rgb(91 67 0),
+        warn-on-color-container: rgb(255 223 155),
+        info-color: rgb(137 208 237),
+        info-on-color: rgb(0 53 68),
+        info-color-container: rgb(0 77 97),
+        info-on-color-container: rgb(185 234 255),
+        success-color: rgb(150 213 166),
+        success-on-color: rgb(0 57 28),
+        success-color-container: rgb(18 81 46),
+        success-on-color-container: rgb(177 241 193),
+        logo:url("../components/images/synterix.png")
+);
+
+$light-theme: (
+        primary: rgb(28 101 133),
+        surface-tint: rgb(28 101 133),
+        on-primary: rgb(255 255 255),
+        primary-container: rgb(195 231 255),
+        on-primary-container: rgb(0 76 105),
+        secondary: rgb(78 97 109),
+        on-secondary: rgb(255 255 255),
+        secondary-container: rgb(209 229 244),
+        on-secondary-container: rgb(54 73 85),
+        tertiary: rgb(96 90 125),
+        on-tertiary: rgb(255 255 255),
+        tertiary-container: rgb(230 222 255),
+        on-tertiary-container: rgb(72 66 100),
+        error: rgb(186 26 26),
+        on-error: rgb(255 255 255),
+        error-container: rgb(255 218 214),
+        on-error-container: rgb(147 0 10),
+        background: rgb(246 250 254),
+        on-background: rgb(24 28 31),
+        surface: rgb(246 250 254),
+        on-surface: rgb(24 28 31),
+        surface-variant: rgb(220 227 233),
+        on-surface-variant: rgb(65 72 77),
+        outline: rgb(113 120 125),
+        outline-variant: rgb(192 199 205),
+        shadow: rgb(0 0 0),
+        scrim: rgb(0 0 0),
+        inverse-surface: rgb(44 49 52),
+        inverse-on-surface: rgb(237 241 245),
+        inverse-primary: rgb(143 206 243),
+        primary-fixed: rgb(195 231 255),
+        on-primary-fixed: rgb(0 30 44),
+        primary-fixed-dim: rgb(143 206 243),
+        on-primary-fixed-variant: rgb(0 76 105),
+        secondary-fixed: rgb(209 229 244),
+        on-secondary-fixed: rgb(10 30 40),
+        secondary-fixed-dim: rgb(181 201 215),
+        on-secondary-fixed-variant: rgb(54 73 85),
+        tertiary-fixed: rgb(230 222 255),
+        on-tertiary-fixed: rgb(29 23 54),
+        tertiary-fixed-dim: rgb(202 193 234),
+        on-tertiary-fixed-variant: rgb(72 66 100),
+        surface-dim: rgb(214 218 223),
+        surface-bright: rgb(246 250 254),
+        surface-container-lowest: rgb(255 255 255),
+        surface-container-low: rgb(240 244 248),
+        surface-container: rgb(234 238 242),
+        surface-container-high: rgb(229 232 237),
+        surface-container-highest: rgb(223 227 231),
+        danger-color: rgb(144 74 74),
+        danger-on-color: rgb(255 255 255),
+        danger-color-container: rgb(255 218 216),
+        danger-on-color-container: rgb(115 51 52),
+        warn-color: rgb(119 90 11),
+        warn-on-color: rgb(255 255 255),
+        warn-color-container: rgb(255 223 155),
+        warn-on-color-container: rgb(91 67 0),
+        info-color: rgb(10 103 128),
+        info-on-color: rgb(255 255 255),
+        info-color-container: rgb(185 234 255),
+        info-on-color-container: rgb(0 77 97),
+        success-color: rgb(46 106 68),
+        success-on-color: rgb(255 255 255),
+        success-color-container: rgb(177 241 193),
+        success-on-color-container: rgb(18 81 46),
+        logo:url("../components/images/synterix-black.png")
+);
+
+:root {
+  @each $key, $value in $dark-theme {
+    --#{$key}: #{$value};
+  }
+}
+
+[data-theme="dark"] {
+  @each $key, $value in $dark-theme {
+    --#{$key}: #{$value};
+  }
+}
+
+[data-theme="light"] {
+  @each $key, $value in $light-theme {
+    --#{$key}: #{$value};
+  }
+}
+
+:root {
+  --danger: #CB444A;
+  --danger-darker: #8a2226;
+  --danger-lighter: #D1595F;
+  --warn: #F6C344;
+  --warn-darker: #9f7819;
+  --warn-lighter: #F7CD62;
+  --info: #5DC7EC;
+  --info-darker: #29819f;
+  --info-lighter: #7AD1EF;
+  --success: #408558;
+  --success-darker: #3A784F;
+  --success-lighter: #469261;
+}

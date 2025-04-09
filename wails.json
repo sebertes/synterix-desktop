@@ -1,0 +1,28 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "synterix",
+  "outputfilename": "synterix",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "sebertes",
+    "email": "synterix@qq.com"
+  },
+  "build:dir": "./build",
+  "info": {
+    "companyName": "Synterix",
+    "productName": "Synterix",
+    "productVersion": "1.0.0",
+    "copyright": "© 2025 Sebertes",
+    "comments": "Synterix is free and open source software released under the MIT license",
+    "protocols": [
+      {
+        "scheme": "myapp",
+        "description": "Myapp protocol",
+        "role": "Editor"
+      }
+    ]
+  }
+}

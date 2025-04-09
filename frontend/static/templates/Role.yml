@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-reader
+  namespace: ${NAMESPACE}
+  labels:
+    rbac-group: monitoring
+  annotations:
+    description: "Allows read-only access to pods in the namespace"
+rules:
+  - apiGroups: [""]  # 核心API组使用空字符串
+    resources: ["pods", "pods/log"]  # 资源类型
+    verbs: ["get", "list", "watch"]  # 允许的操作
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "list", "create"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["app-config"]  # 限制特定资源实例
+    verbs: ["get", "update"]
