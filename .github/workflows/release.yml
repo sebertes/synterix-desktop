@@ -51,6 +51,12 @@ jobs:
           git tag ${{ env.TAG_NAME }}
           git push origin ${{ env.TAG_NAME }}
 
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.build.name }}-${{ matrix.build.platform }}
+          path: build/bin/*
+
   release:
     name: Create Release
     needs: build
