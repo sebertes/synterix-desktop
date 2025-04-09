@@ -57,7 +57,12 @@ jobs:
           echo "TAG_NAME=v${{ github.event.inputs.version }}" >> $GITHUB_ENV
 
       - name: Build project
-        run: wails build -platform ${{ matrix.wails_platform }} -clean -upx -nsis -ldflags "-X main.version=${{ env.VERSION }}"
+        run: |
+          if [ "${{ matrix.wails_platform }}" == "windows" ]; then
+            wails build -platform ${{ matrix.wails_platform }} -clean -upx -nsis -ldflags "-X main.version=${{ env.VERSION }}"
+          else
+            wails build -platform ${{ matrix.wails_platform }} -clean -upx -ldflags "-X main.version=${{ env.VERSION }}"
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
