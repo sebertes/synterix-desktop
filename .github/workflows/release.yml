@@ -57,11 +57,12 @@ jobs:
 
       - name: Build project
         run: |
-          if [ "${{ matrix.wails_platform }}" == "windows" ]; then
-            wails build -platform ${{ matrix.wails_platform }} -clean -upx -nsis -ldflags "-X main.version=${{ env.VERSION }}"
-          else
-            wails build -platform ${{ matrix.wails_platform }} -clean -upx -ldflags "-X main.version=${{ env.VERSION }}"
-          fi
+          if ($env:matrix_wails_platform -eq "windows") {
+            wails build -platform $env:matrix_wails_platform -clean -upx -nsis -ldflags "-X main.version=$env:VERSION"
+          } else {
+            wails build -platform $env:matrix_wails_platform -clean -upx -ldflags "-X main.version=$env:VERSION"
+          }
+        shell: pwsh
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
