@@ -34,6 +34,17 @@ jobs:
           build-platform: ${{ matrix.build-platform }}
           package: true
 
+      - name: List build directory (debug)
+        run: ls -la ./build/bin
+
+      - name: Prepare macOS DMG
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install create-dmg
+          cd ./build/bin
+          create-dmg Synterix.app synterix-${{ github.event.inputs.version }}.dmg
+          ls -la
+
       - name: Rename Artifact
         run: |
           VERSION=${{ github.event.inputs.version }}
