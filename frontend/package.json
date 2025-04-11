@@ -4,9 +4,9 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "./node_modules/.bin/vite dev -- --clearScreen false --logLevel silent",
-    "build": "./node_modules/.bin/vite build",
-    "preview": "./node_modules/.bin/vite preview"
+    "dev": "npx vite dev -- --clearScreen false --logLevel silent",
+    "build": "npx vite build",
+    "preview": "npx vite build preview"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^4.0.0",
