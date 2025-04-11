@@ -10,7 +10,9 @@ on:
         default: '1.0.0'
 
 jobs:
-  build:
+  release:
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -21,7 +23,6 @@ jobs:
             build-platform: darwin/universal
           - os: windows-latest
             build-platform: windows/amd64
-    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
@@ -34,35 +35,17 @@ jobs:
           build-platform: ${{ matrix.build-platform }}
           package: true
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: synterix-${{ matrix.os }}-${{ github.event.inputs.version }}
-          path: ./build/bin/*
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Create tag if not exists
+      - name: Create Git Tag
         run: |
-          if git rev-parse "v${{ github.event.inputs.version }}" >/dev/null 2>&1; then
-            echo "Tag already exists."
+          TAG="v${{ github.event.inputs.version }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag already exists, skipping creation."
           else
             git config user.name "${{ github.actor }}"
             git config user.email "${{ github.actor }}@users.noreply.github.com"
-            git tag -a "v${{ github.event.inputs.version }}" -m "Release v${{ github.event.inputs.version }}"
-            git push origin "v${{ github.event.inputs.version }}"
+            git tag -a "$TAG" -m "Release $TAG"
+            git push origin "$TAG"
           fi
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: ./artifacts
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -73,4 +56,5 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            artifacts/synterix*
+            ./build/bin/*
+
