@@ -34,15 +34,30 @@ jobs:
           build-platform: ${{ matrix.build-platform }}
           package: true
 
+      - name: Prepare upload artifacts (unique names)
+        run: |
+          mkdir -p upload/${{ matrix.os }}
+          cp -r build/bin/* upload/${{ matrix.os }}/
+
+          if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+            mv upload/${{ matrix.os }}/iconfile.icns upload/${{ matrix.os }}/iconfile-macos.icns || true
+            mv upload/${{ matrix.os }}/Info.plist upload/${{ matrix.os }}/Info-macos.plist || true
+          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            mv upload/${{ matrix.os }}/synterix.exe upload/${{ matrix.os }}/synterix-windows.exe || true
+          elif [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            mv upload/${{ matrix.os }}/synterix upload/${{ matrix.os }}/synterix-linux || true
+          fi
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: synterix-${{ matrix.os }}
-          path: build/bin/**
+          path: upload/${{ matrix.os }}/**
 
   release:
     needs: build
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -50,7 +65,7 @@ jobs:
       - name: Create tag if not exists
         run: |
           if git rev-parse "v${{ github.event.inputs.version }}" >/dev/null 2>&1; then
-            echo "Tag v${{ github.event.inputs.version }} already exists."
+            echo "Tag already exists."
           else
             git config user.name "${{ github.actor }}"
             git config user.email "${{ github.actor }}@users.noreply.github.com"
@@ -70,4 +85,4 @@ jobs:
           name: v${{ github.event.inputs.version }}
           body: |
             Release v${{ github.event.inputs.version }}
-          files: ./artifacts/**/*
+          files: ./artifacts/**/*  # Recursive wildcard to include all renamed files
