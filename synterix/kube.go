@@ -162,16 +162,21 @@ func (s *KubeProxyServer) Start() error {
 
 					go func() {
 						for {
-							msgType, message, err := wsConn.ReadMessage()
-							if err != nil {
-								errChan <- err
+							select {
+							case <-ctx.Done():
 								return
+							default:
+								msgType, message, err := wsConn.ReadMessage()
+								if err != nil {
+									errChan <- err
+									return
+								}
+								if msgType != websocket.BinaryMessage {
+									log.Printf("not support websocket message type: %d", msgType)
+									continue
+								}
+								msgChan <- message
 							}
-							if msgType != websocket.BinaryMessage {
-								log.Printf("not support websocket message type: %d", msgType)
-								continue
-							}
-							msgChan <- message
 						}
 					}()
 
