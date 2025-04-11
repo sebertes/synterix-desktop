@@ -30,15 +30,15 @@ jobs:
       - name: Build Wails Application
         uses: dAppServer/wails-build-action@main
         with:
-          build-name: synterix
+          build-name: synterix-${{ matrix.os }}-${{ github.event.inputs.version }}
           build-platform: ${{ matrix.build-platform }}
           package: true
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release-${{ matrix.os }}
-          path: ./build/bin/synterix-${{ github.event.inputs.version }}.${{ matrix.artifact-ext }}
+          name: synterix-${{ matrix.os }}-${{ github.event.inputs.version }}
+          path: ./build/bin/*
 
   release:
     needs: build
