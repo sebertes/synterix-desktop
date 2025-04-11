@@ -30,7 +30,7 @@ jobs:
       - name: Build Wails Application
         uses: dAppServer/wails-build-action@main
         with:
-          build-name: synterix-${{ matrix.os }}-${{ github.event.inputs.version }}
+          build-name: synterix
           build-platform: ${{ matrix.build-platform }}
           package: true
 
