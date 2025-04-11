@@ -36,17 +36,30 @@ jobs:
 
       - name: Prepare upload artifacts (unique names)
         run: |
-          mkdir -p upload/${{ matrix.os }}
-          cp -r build/bin/* upload/${{ matrix.os }}/
+          # Linux/macOS 环境
+          if [ "${{ matrix.os }}" == "macos-latest" ] || [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            mkdir -p upload/${{ matrix.os }}
+            cp -r build/bin/* upload/${{ matrix.os }}/
 
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            mv upload/${{ matrix.os }}/iconfile.icns upload/${{ matrix.os }}/iconfile-macos.icns || true
-            mv upload/${{ matrix.os }}/Info.plist upload/${{ matrix.os }}/Info-macos.plist || true
+            if [ "${{ matrix.os }}" == "macos-latest" ]; then
+              mv upload/${{ matrix.os }}/iconfile.icns upload/${{ matrix.os }}/iconfile-macos.icns || true
+              mv upload/${{ matrix.os }}/Info.plist upload/${{ matrix.os }}/Info-macos.plist || true
+            elif [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+              mv upload/${{ matrix.os }}/synterix upload/${{ matrix.os }}/synterix-linux || true
+            fi
+
+          # Windows 环境
           elif [ "${{ matrix.os }}" == "windows-latest" ]; then
-            mv upload/${{ matrix.os }}/synterix.exe upload/${{ matrix.os }}/synterix-windows.exe || true
-          elif [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            mv upload/${{ matrix.os }}/synterix upload/${{ matrix.os }}/synterix-linux || true
+            pwsh -Command "
+              New-Item -ItemType Directory -Force -Path 'upload/${{ matrix.os }}'
+              Copy-Item -Path 'build/bin/*' -Destination 'upload/${{ matrix.os }}/' -Recurse
+
+              if (\$env:matrix_os -eq 'windows-latest') {
+                Rename-Item 'upload/\$env:matrix_os/synterix.exe' 'upload/\$env:matrix_os/synterix-windows.exe' -ErrorAction SilentlyContinue
+              }
+            "
           fi
+        shell: bash  # 默认 shell 使用 bash
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
