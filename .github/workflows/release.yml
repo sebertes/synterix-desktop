@@ -34,11 +34,24 @@ jobs:
           build-platform: ${{ matrix.build-platform }}
           package: true
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Rename Artifact
+        run: |
+          VERSION=${{ github.event.inputs.version }}
+          ARTIFACT_PATH="./build/bin/synterix.${{ matrix.artifact-ext }}"
+          NEW_NAME="synterix-${VERSION}.${{ matrix.artifact-ext }}"
+          
+          if [ -f "$ARTIFACT_PATH" ]; then
+            mv "$ARTIFACT_PATH" "./build/bin/${NEW_NAME}"
+          else
+            echo "Error: Artifact not found at $ARTIFACT_PATH"
+            exit 1
+          fi
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: synterix-${{ matrix.os }}
-          path: upload/${{ matrix.os }}/**
+          name: release-${{ matrix.os }}
+          path: ./build/bin/synterix-${{ github.event.inputs.version }}.${{ matrix.artifact-ext }}
 
   release:
     needs: build
@@ -68,7 +81,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ github.event.inputs.version }}
-          name: v${{ github.event.inputs.version }}
-          body: |
-            Release v${{ github.event.inputs.version }}
-          files: ./artifacts/**/*  # Recursive wildcard to include all renamed files
+          name: "v${{ github.event.inputs.version }}"
+          body: "Release version ${{ github.event.inputs.version }} - Built for all platforms"
+          draft: false
+          prerelease: false
+          files: |
+            artifacts/**/synterix-*
