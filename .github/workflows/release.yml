@@ -39,12 +39,12 @@ jobs:
           mkdir -p upload/${{ matrix.os }}
           cp -r build/bin/* upload/${{ matrix.os }}/
 
-          if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
             mv upload/${{ matrix.os }}/iconfile.icns upload/${{ matrix.os }}/iconfile-macos.icns || true
             mv upload/${{ matrix.os }}/Info.plist upload/${{ matrix.os }}/Info-macos.plist || true
-          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
             mv upload/${{ matrix.os }}/synterix.exe upload/${{ matrix.os }}/synterix-windows.exe || true
-          elif [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+          elif [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
             mv upload/${{ matrix.os }}/synterix upload/${{ matrix.os }}/synterix-linux || true
           fi
 
