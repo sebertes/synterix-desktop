@@ -17,10 +17,29 @@ jobs:
         include:
           - os: ubuntu-latest
             build-platform: linux/amd64
+            artifact-ext: tar.gz
+            artifact-pattern: "synterix*"
           - os: macos-latest
             build-platform: darwin/universal
+            artifact-ext: dmg
+            artifact-pattern: "Synterix.app"
+            package-cmd: |
+              brew install create-dmg
+              cd ./build/bin
+              create-dmg Synterix.app synterix-${{ github.event.inputs.version }}.dmg
           - os: windows-latest
             build-platform: windows/amd64
+            artifact-ext: zip
+            artifact-pattern: "synterix*"
+            package-cmd: |
+              cd ./build/bin
+              $exeName = (Get-ChildItem -Filter "synterix*.exe" | Select-Object -First 1).Name
+              if (-not $exeName) {
+                Write-Error "No .exe file found in build directory"
+                exit 1
+              }
+              $zipName = "synterix-${{ github.event.inputs.version }}.zip"
+              Compress-Archive -Path $exeName, "webview2loader.dll" -DestinationPath $zipName -Force
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -35,60 +54,72 @@ jobs:
           package: true
 
       - name: List build directory (debug)
-        run: ls -la ./build/bin
-
-      - name: Prepare macOS DMG
-        if: matrix.os == 'macos-latest'
         run: |
-          brew install create-dmg
-          cd ./build/bin
-          create-dmg Synterix.app synterix-${{ github.event.inputs.version }}.dmg
-          ls -la
+          echo "Build directory contents:"
+          ls -la ./build/bin
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            pwsh -Command "Get-ChildItem ./build/bin -Recurse | Format-Table -AutoSize"
+          fi
 
-      - name: Rename Artifact
+      - name: Package artifacts
+        if: matrix.package-cmd != ''
+        run: ${{ matrix.package-cmd }}
+
+      - name: Rename Artifacts
         run: |
           VERSION=${{ github.event.inputs.version }}
-          ARTIFACT_PATH="./build/bin/synterix.${{ matrix.artifact-ext }}"
-          NEW_NAME="synterix-${VERSION}.${{ matrix.artifact-ext }}"
+          BUILD_DIR="./build/bin"
           
-          if [ -f "$ARTIFACT_PATH" ]; then
-            mv "$ARTIFACT_PATH" "./build/bin/${NEW_NAME}"
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+            # macOS - we already created the DMG in package step
+            ARTIFACT_PATH=$(find "$BUILD_DIR" -name "synterix-*.dmg" | head -n 1)
+            NEW_NAME="synterix-${VERSION}.dmg"
+          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+            # Windows - we created a ZIP file
+            ARTIFACT_PATH=$(find "$BUILD_DIR" -name "synterix-*.zip" | head -n 1)
+            NEW_NAME="synterix-${VERSION}.zip"
           else
-            echo "Error: Artifact not found at $ARTIFACT_PATH"
+            # Linux - use the original pattern
+            ARTIFACT_PATH=$(find "$BUILD_DIR" -name "${{ matrix.artifact-pattern }}" | head -n 1)
+            NEW_NAME="synterix-${VERSION}.${{ matrix.artifact-ext }}"
+          fi
+          
+          if [ -z "$ARTIFACT_PATH" ]; then
+            echo "::error::No artifact found in $BUILD_DIR"
+            ls -la "$BUILD_DIR" || true
             exit 1
+          fi
+          
+          # Only rename if the name doesn't already match
+          if [[ "$(basename "$ARTIFACT_PATH")" != "$NEW_NAME" ]]; then
+            mv "$ARTIFACT_PATH" "$BUILD_DIR/$NEW_NAME"
+            echo "Renamed $ARTIFACT_PATH to $BUILD_DIR/$NEW_NAME"
+          else
+            echo "Artifact already has correct name: $NEW_NAME"
           fi
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: release-${{ matrix.os }}
-          path: ./build/bin/synterix-${{ github.event.inputs.version }}.${{ matrix.artifact-ext }}
+          path: ./build/bin/synterix-${{ github.event.inputs.version }}.*
 
   release:
-    needs: build
+    name: Create Release
     runs-on: ubuntu-latest
-
+    needs: build
+    permissions:
+      contents: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Create tag if not exists
-        run: |
-          if git rev-parse "v${{ github.event.inputs.version }}" >/dev/null 2>&1; then
-            echo "Tag already exists."
-          else
-            git config user.name "${{ github.actor }}"
-            git config user.email "${{ github.actor }}@users.noreply.github.com"
-            git tag -a "v${{ github.event.inputs.version }}" -m "Release v${{ github.event.inputs.version }}"
-            git push origin "v${{ github.event.inputs.version }}"
-          fi
-
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
-          path: ./artifacts
+          path: artifacts
 
-      - name: Create GitHub Release
+      - name: List downloaded files
+        run: find artifacts -type f
+
+      - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ github.event.inputs.version }}
