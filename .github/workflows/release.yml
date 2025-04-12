@@ -60,7 +60,7 @@ jobs:
       - name: Zip build artifacts
         run: |
           mkdir -p dist
-          zip -r dist/synterix-${{ matrix.build-platform }}.zip build/bin
+          zip -r dist/synterix-${{ matrix.build-platform // '/' / '-' }}.zip build/bin
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
