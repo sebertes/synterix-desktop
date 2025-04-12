@@ -40,10 +40,13 @@ jobs:
         include:
           - os: ubuntu-latest
             build-platform: linux/amd64
+            build-file-name: linux
           - os: macos-latest
             build-platform: darwin/universal
+            build-file-name: macos
           - os: windows-latest
             build-platform: windows/amd64
+            build-file-name: windows
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -60,7 +63,7 @@ jobs:
       - name: Zip build artifacts
         run: |
           mkdir -p dist
-          zip -r dist/synterix-${{ matrix.build-platform // '/' / '-' }}.zip build/bin
+          zip -r dist/synterix-${{ matrix.build-file-name }}.zip build/bin
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -72,6 +75,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event.inputs.tag }}
-          files: dist/synterix-${{ matrix.build-platform }}.zip
+          files: dist/synterix-${{ matrix.build-file-name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
