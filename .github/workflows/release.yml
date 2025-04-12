@@ -12,6 +12,8 @@ on:
 jobs:
   prepare:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set-version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -23,17 +25,36 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
+      - name: Set version output
+        id: set-version
+        run: echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+
       - name: Create tag if it does not exist
         shell: bash
         run: |
-          if git rev-parse "refs/tags/${{ github.event.inputs.tag }}" >/dev/null 2>&1; then
-            echo "Tag '${{ github.event.inputs.tag }}' already exists."
+          if git rev-parse "refs/tags/${{ github.event.inputs.version }}" >/dev/null 2>&1; then
+            echo "Tag '${{ github.event.inputs.version }}' already exists."
           else
-            echo "Creating tag '${{ github.event.inputs.tag }}'"
-            git tag ${{ github.event.inputs.tag }}
-            git push origin ${{ github.event.inputs.tag }}
+            echo "Creating tag '${{ github.event.inputs.version }}'"
+            git tag ${{ github.event.inputs.version }}
+            git push origin ${{ github.event.inputs.version }}
           fi
+
+      - name: Create GitHub Release (if not exists)
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if gh release view "${{ github.event.inputs.version }}" >/dev/null 2>&1; then
+            echo "Release '${{ github.event.inputs.version }}' already exists."
+          else
+            echo "Creating release '${{ github.event.inputs.version }}'"
+            gh release create "${{ github.event.inputs.version }}" \
+              --title "Synterix v${{ github.event.inputs.version }}" \
+              --notes "Automated release for version v${{ github.event.inputs.version }}"
+          fi
+
   build:
+    needs: prepare
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -68,13 +89,13 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: synterix-${{ matrix.os }}-${{ github.event.inputs.version }}
-          path: ./build/bin/*
+          name: synterix-${{ matrix.os }}-${{ needs.prepare.outputs.version }}
+          path: ./dist/*
 
       - name: Upload release asset
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.event.inputs.tag }}
+          tag_name: ${{ needs.prepare.outputs.version }}
           files: dist/synterix-${{ matrix.build-file-name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
