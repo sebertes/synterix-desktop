@@ -10,6 +10,29 @@ on:
         default: '1.0.0'
 
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Create tag if it does not exist
+        shell: bash
+        run: |
+          if git rev-parse "refs/tags/${{ github.event.inputs.tag }}" >/dev/null 2>&1; then
+            echo "Tag '${{ github.event.inputs.tag }}' already exists."
+          else
+            echo "Creating tag '${{ github.event.inputs.tag }}'"
+            git tag ${{ github.event.inputs.tag }}
+            git push origin ${{ github.event.inputs.tag }}
+          fi
   build:
     strategy:
       matrix:
@@ -26,21 +49,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Set up Git
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-      - name: Create tag if it does not exist
-        run: |
-          if git rev-parse "refs/tags/${{ github.event.inputs.tag }}" >/dev/null 2>&1; then
-            echo "Tag '${{ github.event.inputs.tag }}' already exists."
-          else
-            echo "Creating tag '${{ github.event.inputs.tag }}'"
-            git tag ${{ github.event.inputs.tag }}
-            git push origin ${{ github.event.inputs.tag }}
-          fi
 
       - name: Build Wails Application
         uses: dAppServer/wails-build-action@main
