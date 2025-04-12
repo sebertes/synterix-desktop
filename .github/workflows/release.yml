@@ -86,15 +86,15 @@ jobs:
         run: |
           mkdir -p dist
           if [[ "${{ runner.os }}" == "Windows" ]]; then
-            powershell -Command "Compress-Archive -Path build/bin/* -DestinationPath dist/synterix-windows.zip"
+            powershell -Command "Compress-Archive -Path build/bin/* -DestinationPath dist/synterix-windows-${{ needs.prepare.outputs.version }}.zip"
           else
-            zip -r dist/synterix-${{ matrix.build-file-name }}.zip build/bin
+            zip -r dist/synterix-${{ matrix.build-file-name }}-${{ needs.prepare.outputs.version }}.zip build/bin
           fi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: synterix-${{ matrix.os }}-${{ needs.prepare.outputs.version }}
+          name: synterix-${{ matrix.os }}
           path: ./dist/*
 
       - name: Upload release asset
