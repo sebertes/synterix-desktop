@@ -82,9 +82,14 @@ jobs:
           package: true
 
       - name: Zip build artifacts
+        shell: bash
         run: |
           mkdir -p dist
-          zip -r dist/synterix-${{ matrix.build-file-name }}.zip build/bin
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            powershell -Command "Compress-Archive -Path build/bin/* -DestinationPath dist/synterix-windows.zip"
+          else
+            zip -r dist/synterix-${{ matrix.build-file-name }}.zip build/bin
+          fi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
