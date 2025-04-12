@@ -101,6 +101,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ needs.prepare.outputs.version }}
-          files: dist/synterix-${{ matrix.build-file-name }}.zip
+          files: dist/synterix-${{ matrix.build-file-name }}-${{ needs.prepare.outputs.version }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
